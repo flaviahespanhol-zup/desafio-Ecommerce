@@ -14,7 +14,7 @@ public class ProductEntity {
     double price;
     int stock;
 
-    ProductEntity() {}
+    public ProductEntity() {}
 
     public Long getId() {
         return id;
