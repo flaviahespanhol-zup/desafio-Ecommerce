@@ -3,6 +3,7 @@ package desafio.ecommerce.controllers;
 import desafio.ecommerce.dtos.ClientDTO;
 import desafio.ecommerce.dtos.PostClientDTO;
 import desafio.ecommerce.services.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientDTO> registerClientController(@RequestBody PostClientDTO newClient) {
+    public ResponseEntity<ClientDTO> registerClientController(@Valid @RequestBody PostClientDTO newClient) {
         ClientDTO saveNewClient = clientService.registerClientService(newClient);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveNewClient);
     }
