@@ -5,6 +5,8 @@ import desafio.ecommerce.dtos.ProductDTO;
 import desafio.ecommerce.services.helper.ProductFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductService {
 
@@ -16,5 +18,9 @@ public class ProductService {
 
     public ProductDTO registerProductService(PostProductDTO newProduct) {
         return productFactory.registerProductFactory(newProduct);
+    }
+
+    public List<ProductDTO> listAllProductsService() {
+        return productFactory.listAllProducts();
     }
 }
