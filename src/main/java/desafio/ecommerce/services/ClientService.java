@@ -17,4 +17,8 @@ public class ClientService {
     public ClientDTO registerClientService(PostClientDTO newClient) {
         return clientFactory.registerClientFactory(newClient);
     }
+
+    public ClientDTO getClientByCpfService(String cpf) {
+        return clientFactory.getClientByCpfFactory(cpf);
+    }
 }

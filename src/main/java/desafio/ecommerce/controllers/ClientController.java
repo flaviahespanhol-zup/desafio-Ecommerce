@@ -17,8 +17,15 @@ public class ClientController {
         this.clientService = clientService;
     }
 
+    @PostMapping
     public ResponseEntity<ClientDTO> registerClientController(@RequestBody PostClientDTO newClient) {
         ClientDTO saveNewClient = clientService.registerClientService(newClient);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveNewClient);
+    }
+
+    @GetMapping("/{cpf}")
+    public ResponseEntity<ClientDTO> getClientByCpfController(@PathVariable String cpf) {
+        ClientDTO clientByCpf = clientService.getClientByCpfService(cpf);
+        return ResponseEntity.status(HttpStatus.OK).body(clientByCpf);
     }
 }
