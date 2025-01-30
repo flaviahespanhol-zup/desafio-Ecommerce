@@ -2,22 +2,19 @@ package desafio.ecommerce.services;
 
 import desafio.ecommerce.dtos.PostProductDTO;
 import desafio.ecommerce.dtos.ProductDTO;
-import desafio.ecommerce.models.ProductEntity;
-import desafio.ecommerce.repositories.ProductRepository;
+import desafio.ecommerce.services.helper.ProductFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    private final ProductFactory productFactory;
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductService(ProductFactory productFactory) {
+        this.productFactory = productFactory;
     }
 
     public ProductDTO registerProductService(PostProductDTO newProduct) {
-        ProductEntity newProductEntity = newProduct.dtoToEntity();
-        ProductEntity saveNewProduct = productRepository.save(newProductEntity);
-        return ProductDTO.entityToDTO(saveNewProduct);
+        return productFactory.registerProductFactory(newProduct);
     }
 }
