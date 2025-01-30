@@ -3,6 +3,7 @@ package desafio.ecommerce.controllers;
 import desafio.ecommerce.dtos.PostProductDTO;
 import desafio.ecommerce.dtos.ProductDTO;
 import desafio.ecommerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> registerProductController(@RequestBody PostProductDTO newProduct) {
+    public ResponseEntity<ProductDTO> registerProductController(@Valid @RequestBody PostProductDTO newProduct) {
         ProductDTO saveNewProduct = productService.registerProductService(newProduct);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveNewProduct);
     }
