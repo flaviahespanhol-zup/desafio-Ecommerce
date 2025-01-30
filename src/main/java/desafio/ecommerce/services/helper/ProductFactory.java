@@ -2,6 +2,7 @@ package desafio.ecommerce.services.helper;
 
 import desafio.ecommerce.dtos.PostProductDTO;
 import desafio.ecommerce.dtos.ProductDTO;
+import desafio.ecommerce.exceptions.ProductNotFoundException;
 import desafio.ecommerce.models.ProductEntity;
 import desafio.ecommerce.repositories.ProductRepository;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,13 @@ public class ProductFactory {
         List<ProductEntity> allProducts = productRepository.findAll();
         return allProducts.stream()
                 .map(ProductDTO::entityToDTO).toList();
+    }
+
+    public ProductDTO getProductById(Long id) throws ProductNotFoundException {
+        ProductEntity entity = productRepository.findById(id)
+                .orElseThrow(ProductNotFoundException::new);
+        return new ProductDTO(entity.getId(), entity.getName(),
+                entity.getPrice(), entity.getStock());
     }
 
 }
