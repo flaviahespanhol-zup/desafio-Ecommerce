@@ -36,4 +36,10 @@ public class ProductFactory {
                 entity.getPrice(), entity.getStock());
     }
 
+    public void deleteProductById(Long id) throws ProductNotFoundException {
+        ProductEntity product = productRepository.findById(id)
+                .orElseThrow(ProductNotFoundException::new);
+        productRepository.deleteById(product.getId());
+    }
+
 }

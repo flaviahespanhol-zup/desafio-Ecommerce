@@ -2,6 +2,7 @@ package desafio.ecommerce.controllers;
 
 import desafio.ecommerce.dtos.PostProductDTO;
 import desafio.ecommerce.dtos.ProductDTO;
+import desafio.ecommerce.exceptions.ProductNotFoundException;
 import desafio.ecommerce.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -32,5 +33,10 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(allProducts);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProductController(@PathVariable Long id) throws ProductNotFoundException {
+        productService.deleteProductByIdService(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
