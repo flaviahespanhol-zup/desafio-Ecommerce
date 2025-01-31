@@ -19,7 +19,7 @@ public class ClientService {
         return clientFactory.registerClientFactory(newClient);
     }
 
-    public ClientDTO getClientByCpfService(String cpf) {
+    public ClientDTO getClientByCpfService(String cpf) throws ClientNotFoundException {
         return clientFactory.getClientByCpfFactory(cpf);
     }
 

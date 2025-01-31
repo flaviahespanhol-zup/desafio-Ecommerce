@@ -3,6 +3,7 @@ package desafio.ecommerce.services.helper;
 import desafio.ecommerce.dtos.ClientDTO;
 import desafio.ecommerce.dtos.PostClientDTO;
 import desafio.ecommerce.exceptions.ClientNotFoundException;
+import desafio.ecommerce.exceptions.ProductNotFoundException;
 import desafio.ecommerce.models.ClientEntity;
 import desafio.ecommerce.repositories.ClientRepository;
 import org.springframework.stereotype.Component;
@@ -22,8 +23,9 @@ public class ClientFactory {
         return ClientDTO.entityToDTO(saveNewClient);
     }
 
-    public ClientDTO getClientByCpfFactory(String cpf) {
-        ClientEntity clientByName = clientRepository.getClientByCpf(cpf);
+    public ClientDTO getClientByCpfFactory(String cpf) throws ClientNotFoundException {
+        ClientEntity clientByName = clientRepository.getClientByCpf(cpf)
+                .orElseThrow(ClientNotFoundException::new);
         return new ClientDTO(clientByName.getId(), clientByName.getName(),
                 clientByName.getCpf(), clientByName.getEmail());
     }

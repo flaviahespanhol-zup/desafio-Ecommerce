@@ -26,7 +26,8 @@ public class ClientController {
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<ClientDTO> getClientByCpfController(@PathVariable String cpf) {
+    public ResponseEntity<ClientDTO> getClientByCpfController(@PathVariable String cpf)
+            throws ClientNotFoundException {
         ClientDTO clientByCpf = clientService.getClientByCpfService(cpf);
         return ResponseEntity.status(HttpStatus.OK).body(clientByCpf);
     }
