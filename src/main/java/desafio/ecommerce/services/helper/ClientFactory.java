@@ -2,11 +2,10 @@ package desafio.ecommerce.services.helper;
 
 import desafio.ecommerce.dtos.ClientDTO;
 import desafio.ecommerce.dtos.PostClientDTO;
+import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.models.ClientEntity;
 import desafio.ecommerce.repositories.ClientRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ClientFactory {
@@ -25,6 +24,24 @@ public class ClientFactory {
 
     public ClientDTO getClientByCpfFactory(String cpf) {
         ClientEntity clientByName = clientRepository.getClientByCpf(cpf);
-        return ClientDTO.entityToDTO(clientByName);
+        return new ClientDTO(clientByName.getId(), clientByName.getName(),
+                clientByName.getCpf(), clientByName.getEmail());
     }
+
+    private void updateClientFields(ClientEntity client, PostClientDTO clientUpdated) {
+        client.setName(clientUpdated.name());
+        client.setCpf(clientUpdated.cpf());
+        client.setEmail(clientUpdated.email());
+    }
+
+    public ClientDTO updateClientFactory(Long id, PostClientDTO clientUpdated) throws ClientNotFoundException {
+        ClientEntity client = clientRepository.findById(id)
+                .orElseThrow(ClientNotFoundException::new);
+
+        updateClientFields(client, clientUpdated);
+
+        ClientEntity updatedClient = clientRepository.save(client);
+        return ClientDTO.entityToDTO(updatedClient);
+    }
+
 }

@@ -2,6 +2,7 @@ package desafio.ecommerce.controllers;
 
 import desafio.ecommerce.dtos.ClientDTO;
 import desafio.ecommerce.dtos.PostClientDTO;
+import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.services.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,5 +29,13 @@ public class ClientController {
     public ResponseEntity<ClientDTO> getClientByCpfController(@PathVariable String cpf) {
         ClientDTO clientByCpf = clientService.getClientByCpfService(cpf);
         return ResponseEntity.status(HttpStatus.OK).body(clientByCpf);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientDTO> updateClientFactoryController(@PathVariable Long id,
+                                                                   @RequestBody PostClientDTO clientUpdated)
+            throws ClientNotFoundException {
+        ClientDTO updateClient = clientService.updateClientFactoryService(id, clientUpdated);
+        return ResponseEntity.status(HttpStatus.OK).body(updateClient);
     }
 }
