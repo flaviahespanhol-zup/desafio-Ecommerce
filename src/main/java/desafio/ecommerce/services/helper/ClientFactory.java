@@ -22,10 +22,11 @@ public class ClientFactory {
         return ClientDTO.entityToDTO(saveNewClient);
     }
 
-    public ClientDTO getClientByCpfFactory(String cpf) {
-        ClientEntity clientByName = clientRepository.getClientByCpf(cpf);
-        return new ClientDTO(clientByName.getId(), clientByName.getName(),
-                clientByName.getCpf(), clientByName.getEmail());
+    public ClientDTO getClientByCpfFactory(String cpf) throws ClientNotFoundException {
+        ClientEntity clientByCpf = clientRepository.getClientByCpf(cpf)
+                .orElseThrow(ClientNotFoundException::new);
+        return new ClientDTO(clientByCpf.getId(), clientByCpf.getName(),
+                clientByCpf.getCpf(), clientByCpf.getEmail());
     }
 
     private void updateClientFields(ClientEntity client, PostClientDTO clientUpdated) {
@@ -43,5 +44,4 @@ public class ClientFactory {
         ClientEntity updatedClient = clientRepository.save(client);
         return ClientDTO.entityToDTO(updatedClient);
     }
-
 }
