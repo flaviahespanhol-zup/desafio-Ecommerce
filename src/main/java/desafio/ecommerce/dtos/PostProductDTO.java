@@ -1,9 +1,11 @@
 package desafio.ecommerce.dtos;
 
 import desafio.ecommerce.models.ProductEntity;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 
 public record PostProductDTO(
+        @Column(unique = true)
         @NotEmpty(message = "O nome não pode estar vazio")
         @NotNull(message = "O nome não pode ser nulo")
         String name,
