@@ -8,7 +8,7 @@ import desafio.ecommerce.exceptions.ProductNotFoundException;
 import desafio.ecommerce.exceptions.ProductUnstockedException;
 import desafio.ecommerce.models.ProductEntity;
 import desafio.ecommerce.repositories.ClientRepositoryJPA;
-import desafio.ecommerce.repositories.ProductRepository;
+import desafio.ecommerce.repositories.ProductRepositoryJPA;
 
 import org.springframework.stereotype.Component;
 
@@ -20,9 +20,9 @@ import java.util.Map;
 public class PurchaseFactory {
 
     private final ClientRepositoryJPA clientRepository;
-    private final ProductRepository productRepository;
+    private final ProductRepositoryJPA productRepository;
 
-    public PurchaseFactory(ClientRepositoryJPA clientRepository, ProductRepository productRepository) {
+    public PurchaseFactory(ClientRepositoryJPA clientRepository, ProductRepositoryJPA productRepository) {
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
     }

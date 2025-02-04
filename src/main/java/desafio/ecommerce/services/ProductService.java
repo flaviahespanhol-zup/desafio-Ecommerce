@@ -3,7 +3,7 @@ package desafio.ecommerce.services;
 import desafio.ecommerce.dtos.PostProductDTO;
 import desafio.ecommerce.dtos.ProductDTO;
 import desafio.ecommerce.exceptions.ProductNotFoundException;
-import desafio.ecommerce.services.helper.ProductFactory;
+import desafio.ecommerce.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,22 +11,22 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private final ProductFactory productFactory;
+    private final ProductRepository productRepository;
 
-    public ProductService(ProductFactory productFactory) {
-        this.productFactory = productFactory;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public ProductDTO registerProductService(PostProductDTO newProduct) {
-        return productFactory.registerProductFactory(newProduct);
+        return productRepository.registerProduct(newProduct);
     }
 
     public List<ProductDTO> listAllProductsService() {
-        return productFactory.listAllProducts();
+        return productRepository.listAllProducts();
     }
 
     public void deleteProductByIdService(Long id) throws ProductNotFoundException {
-        productFactory.deleteProductById(id);
+        productRepository.deleteProductById(id);
     }
 
 }
