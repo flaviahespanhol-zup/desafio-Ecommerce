@@ -50,4 +50,13 @@ public class GeneralControllerAdvice {
                         exception.getMessage()
                 );
     }
+
+    @ExceptionHandler(ClientAlredyExistsException.class)
+    public ResponseEntity<String> handleClientExists(ClientAlredyExistsException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                        exception.getMessage()
+                );
+    }
 }

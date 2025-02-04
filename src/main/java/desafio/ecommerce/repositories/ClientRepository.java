@@ -2,6 +2,7 @@ package desafio.ecommerce.repositories;
 
 import desafio.ecommerce.dtos.ClientDTO;
 import desafio.ecommerce.dtos.PostClientDTO;
+import desafio.ecommerce.exceptions.ClientAlredyExistsException;
 import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.models.ClientEntity;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,12 @@ public class ClientRepository {
         this.clientRepositoryJPA = clientRepositoryJPA;
     }
 
-    public ClientDTO registerClient(PostClientDTO newClient) {
+    public ClientDTO registerClient(PostClientDTO newClient)
+            throws ClientAlredyExistsException {
+        boolean clientExists = clientRepositoryJPA.getClientByCpf(newClient.cpf()).isPresent();
+        if (clientExists) {
+            throw new ClientAlredyExistsException();
+        }
         ClientEntity newClientEntity = newClient.dtoToEntity();
         ClientEntity saveNewClient = clientRepositoryJPA.save(newClientEntity);
         return ClientDTO.entityToDTO(saveNewClient);
