@@ -1,4 +1,4 @@
-package desafio.ecommerce.services.helper;
+package desafio.ecommerce.repositories;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,27 +7,23 @@ import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.exceptions.ProductNotFoundException;
 import desafio.ecommerce.exceptions.ProductUnstockedException;
 import desafio.ecommerce.models.ProductEntity;
-import desafio.ecommerce.repositories.ClientRepositoryJPA;
-import desafio.ecommerce.repositories.ProductRepositoryJPA;
-
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Component
-public class PurchaseFactory {
-
+@Repository
+public class PurchaseRepository {
     private final ClientRepositoryJPA clientRepository;
     private final ProductRepositoryJPA productRepository;
 
-    public PurchaseFactory(ClientRepositoryJPA clientRepository, ProductRepositoryJPA productRepository) {
+    public PurchaseRepository(ClientRepositoryJPA clientRepository, ProductRepositoryJPA productRepository) {
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
     }
 
-    public List<String> shoppingFactory(PostPurchaseDTO purchase)
+    public List<String> shopping(PostPurchaseDTO purchase)
             throws ClientNotFoundException, ProductNotFoundException, ProductUnstockedException {
 
         validateClient(purchase.cpf());
@@ -65,7 +61,7 @@ public class PurchaseFactory {
     }
 
     private void checkStock(ProductEntity product, List<String> productsNotAvailable,
-                                   List<ProductEntity> productsAvailable) {
+                            List<ProductEntity> productsAvailable) {
         if (isProductOutOfStock(product)) {
             productsNotAvailable.add(product.getName());
         } else {
@@ -111,4 +107,3 @@ public class PurchaseFactory {
                 .toList();
     }
 }
-
