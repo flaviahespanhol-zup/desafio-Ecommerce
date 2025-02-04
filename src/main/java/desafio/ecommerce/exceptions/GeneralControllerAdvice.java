@@ -59,4 +59,13 @@ public class GeneralControllerAdvice {
                         exception.getMessage()
                 );
     }
+
+    @ExceptionHandler(ProductAlreadyExistsException.class)
+    public ResponseEntity<String> handleProductExists(ProductAlreadyExistsException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                        exception.getMessage()
+                );
+    }
 }

@@ -2,6 +2,7 @@ package desafio.ecommerce.repositories;
 
 import desafio.ecommerce.dtos.PostProductDTO;
 import desafio.ecommerce.dtos.ProductDTO;
+import desafio.ecommerce.exceptions.ProductAlreadyExistsException;
 import desafio.ecommerce.exceptions.ProductNotFoundException;
 import desafio.ecommerce.models.ProductEntity;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,13 @@ public class ProductRepository {
         this.productRepositoryJPA = productRepositoryJPA;
     }
 
-    public ProductDTO registerProduct(PostProductDTO newProduct) {
+    public ProductDTO registerProduct(PostProductDTO newProduct)
+            throws ProductAlreadyExistsException {
+        boolean nameAlreadyExists = productRepositoryJPA.findByName(newProduct.name()).isPresent();
+        if (nameAlreadyExists) {
+            throw new ProductAlreadyExistsException();
+        }
+
         ProductEntity newProductEntity = newProduct.dtoToEntity();
         ProductEntity saveNewProduct = productRepositoryJPA.save(newProductEntity);
         return ProductDTO.entityToDTO(saveNewProduct);
