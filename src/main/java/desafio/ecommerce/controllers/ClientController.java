@@ -34,8 +34,8 @@ public class ClientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ClientDTO> updateClientFactoryController(
-            @Valid @PathVariable Long id,
-            @RequestBody PostClientDTO clientUpdated)
+            @PathVariable Long id,
+            @RequestBody @Valid PostClientDTO clientUpdated)
             throws ClientNotFoundException {
         ClientDTO updateClient = clientService.updateClientFactoryService(id, clientUpdated);
         return ResponseEntity.status(HttpStatus.OK).body(updateClient);

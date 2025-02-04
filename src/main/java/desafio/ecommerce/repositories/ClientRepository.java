@@ -5,6 +5,7 @@ import desafio.ecommerce.dtos.PostClientDTO;
 import desafio.ecommerce.exceptions.ClientAlredyExistsException;
 import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.models.ClientEntity;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -42,7 +43,7 @@ public class ClientRepository {
         client.setEmail(clientUpdated.email());
     }
 
-    public ClientDTO updateClient(Long id, PostClientDTO clientUpdated)
+    public ClientDTO updateClient(Long id, @Valid PostClientDTO clientUpdated)
             throws ClientNotFoundException, ClientAlredyExistsException {
         ClientEntity client = clientRepositoryJPA.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
