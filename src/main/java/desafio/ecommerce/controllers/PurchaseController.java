@@ -1,6 +1,5 @@
 package desafio.ecommerce.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import desafio.ecommerce.dtos.PostPurchaseDTO;
 import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.exceptions.ProductNotFoundException;

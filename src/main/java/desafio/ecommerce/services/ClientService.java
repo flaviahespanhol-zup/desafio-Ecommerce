@@ -23,7 +23,7 @@ public class ClientService {
         return clientRepository.getClientByCpf(cpf);
     }
 
-    public ClientDTO updateClientFactoryService(Long id, PostClientDTO clientUpdated)
+    public ClientDTO updateClientService(Long id, PostClientDTO clientUpdated)
             throws ClientNotFoundException {
         return clientRepository.updateClient(id,clientUpdated);
     }

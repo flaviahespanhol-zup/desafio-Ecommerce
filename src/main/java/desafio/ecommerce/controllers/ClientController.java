@@ -37,7 +37,7 @@ public class ClientController {
             @PathVariable Long id,
             @RequestBody @Valid PostClientDTO clientUpdated)
             throws ClientNotFoundException {
-        ClientDTO updateClient = clientService.updateClientFactoryService(id, clientUpdated);
+        ClientDTO updateClient = clientService.updateClientService(id, clientUpdated);
         return ResponseEntity.status(HttpStatus.OK).body(updateClient);
     }
 }
