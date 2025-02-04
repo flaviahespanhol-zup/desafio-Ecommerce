@@ -42,9 +42,16 @@ public class ClientRepository {
         client.setEmail(clientUpdated.email());
     }
 
-    public ClientDTO updateClient(Long id, PostClientDTO clientUpdated) throws ClientNotFoundException {
+    public ClientDTO updateClient(Long id, PostClientDTO clientUpdated)
+            throws ClientNotFoundException, ClientAlredyExistsException {
         ClientEntity client = clientRepositoryJPA.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
+
+        boolean cpfExists = clientRepositoryJPA.getClientByCpf(clientUpdated.cpf()).isPresent();
+        boolean emailExists = clientRepositoryJPA.getClientByEmail(clientUpdated.email()).isPresent();
+        if (cpfExists || emailExists) {
+            throw new ClientAlredyExistsException();
+        }
 
         updateClientFields(client, clientUpdated);
 
