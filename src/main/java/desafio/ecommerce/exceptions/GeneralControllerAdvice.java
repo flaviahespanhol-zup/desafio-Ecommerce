@@ -41,4 +41,13 @@ public class GeneralControllerAdvice {
                         exception.getMessage()
                 );
     }
+
+    @ExceptionHandler(ProductUnstockedException.class)
+    public ResponseEntity<String> handleProductUnstocked(ProductUnstockedException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                        exception.getMessage()
+                );
+    }
 }
