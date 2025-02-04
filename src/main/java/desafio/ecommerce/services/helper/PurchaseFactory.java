@@ -1,8 +1,11 @@
 package desafio.ecommerce.services.helper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import desafio.ecommerce.dtos.PostPurchaseDTO;
 import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.exceptions.ProductNotFoundException;
+import desafio.ecommerce.exceptions.ProductUnstockedException;
 import desafio.ecommerce.models.ProductEntity;
 import desafio.ecommerce.repositories.ClientRepository;
 import desafio.ecommerce.repositories.ProductRepository;
@@ -10,7 +13,9 @@ import desafio.ecommerce.repositories.ProductRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class PurchaseFactory {
@@ -23,7 +28,9 @@ public class PurchaseFactory {
         this.productRepository = productRepository;
     }
 
-    public List<String> shoppingFactory(PostPurchaseDTO purchase) throws ClientNotFoundException, ProductNotFoundException {
+    public List<String> shoppingFactory(PostPurchaseDTO purchase)
+            throws ClientNotFoundException, ProductNotFoundException, ProductUnstockedException {
+
         validateClient(purchase.cpf());
 
         List<String> productsNotAvailable = new ArrayList<>();
@@ -45,16 +52,41 @@ public class PurchaseFactory {
                 .orElseThrow(ClientNotFoundException::new);
     }
 
-    private void processProducts(PostPurchaseDTO purchase, List<String> productsNotAvailable, List<ProductEntity> productsAvailable) throws ProductNotFoundException {
+    private void processProducts(PostPurchaseDTO purchase, List<String> productsNotAvailable,
+                                 List<ProductEntity> productsAvailable)
+            throws ProductNotFoundException, ProductUnstockedException {
         for (PostPurchaseDTO.PurchaseProductDTO productDTO : purchase.products()) {
-            String productName = productDTO.name();
-            ProductEntity product = findProductByName(productName);
+            ProductEntity product = findProductByName(productDTO.name());
+            checkStock(product, productsNotAvailable, productsAvailable);
+        }
 
-            if (isProductOutOfStock(product)) {
-                productsNotAvailable.add(productName);
-            } else {
-                productsAvailable.add(product);
+        if (!productsNotAvailable.isEmpty()) {
+            throw new ProductUnstockedException(generateOutOfStockErrorMessage(productsNotAvailable));
+        }
+    }
+
+    private void checkStock(ProductEntity product, List<String> productsNotAvailable,
+                                   List<ProductEntity> productsAvailable) {
+        if (isProductOutOfStock(product)) {
+            productsNotAvailable.add(product.getName());
+        } else {
+            productsAvailable.add(product);
+        }
+    }
+
+    private String generateOutOfStockErrorMessage(List<String> productsNotAvailable) {
+        StringBuilder productsUnstocked = new StringBuilder();
+        for (int i = 0; i < productsNotAvailable.size(); i++) {
+            productsUnstocked.append(productsNotAvailable.get(i));
+            if (i < productsNotAvailable.size() - 1) {
+                productsUnstocked.append(", ");
             }
+        }
+        Map<String, String> response = Map.of("erro", "Produto(s) em falta: " + productsUnstocked);
+        try {
+            return new ObjectMapper().writeValueAsString(response);
+        } catch (JsonProcessingException e) {
+            return "{\"erro\": \"Erro ao processar a mensagem de produtos em falta.\"}";
         }
     }
 

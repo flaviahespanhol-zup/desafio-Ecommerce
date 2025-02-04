@@ -1,8 +1,10 @@
 package desafio.ecommerce.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import desafio.ecommerce.dtos.PostPurchaseDTO;
 import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.exceptions.ProductNotFoundException;
+import desafio.ecommerce.exceptions.ProductUnstockedException;
 import desafio.ecommerce.services.PurchaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ public class PurchaseController {
 
     @PostMapping
     public ResponseEntity<List<String>> shoppingController(@RequestBody PostPurchaseDTO purchase)
-            throws ClientNotFoundException, ProductNotFoundException {
+            throws ClientNotFoundException, ProductNotFoundException, ProductUnstockedException {
         List<String> productsName = purchaseService.shoppingService(purchase);
         return ResponseEntity.status(HttpStatus.CREATED).body(productsName);
     }
