@@ -1,12 +1,46 @@
 package desafio.ecommerce.repositories;
 
 import desafio.ecommerce.dtos.ClientDTO;
+import desafio.ecommerce.dtos.PostClientDTO;
+import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.models.ClientEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+@Repository
+public class ClientRepository {
 
-public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
+    ClientRepositoryJPA clientRepositoryJPA;
 
-    Optional<ClientEntity> getClientByCpf(String cpf);
+    public ClientRepository(ClientRepositoryJPA clientRepositoryJPA) {
+        this.clientRepositoryJPA = clientRepositoryJPA;
+    }
+
+    public ClientDTO registerClient(PostClientDTO newClient) {
+        ClientEntity newClientEntity = newClient.dtoToEntity();
+        ClientEntity saveNewClient = clientRepositoryJPA.save(newClientEntity);
+        return ClientDTO.entityToDTO(saveNewClient);
+    }
+
+    public ClientDTO getClientByCpf(String cpf) throws ClientNotFoundException {
+        ClientEntity clientByCpf = clientRepositoryJPA.getClientByCpf(cpf)
+                .orElseThrow(ClientNotFoundException::new);
+        return new ClientDTO(clientByCpf.getId(), clientByCpf.getName(),
+                clientByCpf.getCpf(), clientByCpf.getEmail());
+    }
+
+    private void updateClientFields(ClientEntity client, PostClientDTO clientUpdated) {
+        client.setName(clientUpdated.name());
+        client.setCpf(clientUpdated.cpf());
+        client.setEmail(clientUpdated.email());
+    }
+
+    public ClientDTO updateClient(Long id, PostClientDTO clientUpdated) throws ClientNotFoundException {
+        ClientEntity client = clientRepositoryJPA.findById(id)
+                .orElseThrow(ClientNotFoundException::new);
+
+        updateClientFields(client, clientUpdated);
+
+        ClientEntity updatedClient = clientRepositoryJPA.save(client);
+        return ClientDTO.entityToDTO(updatedClient);
+    }
 }

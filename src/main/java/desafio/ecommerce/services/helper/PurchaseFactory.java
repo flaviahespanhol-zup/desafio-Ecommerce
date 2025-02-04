@@ -7,23 +7,22 @@ import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.exceptions.ProductNotFoundException;
 import desafio.ecommerce.exceptions.ProductUnstockedException;
 import desafio.ecommerce.models.ProductEntity;
-import desafio.ecommerce.repositories.ClientRepository;
+import desafio.ecommerce.repositories.ClientRepositoryJPA;
 import desafio.ecommerce.repositories.ProductRepository;
 
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Component
 public class PurchaseFactory {
 
-    private final ClientRepository clientRepository;
+    private final ClientRepositoryJPA clientRepository;
     private final ProductRepository productRepository;
 
-    public PurchaseFactory(ClientRepository clientRepository, ProductRepository productRepository) {
+    public PurchaseFactory(ClientRepositoryJPA clientRepository, ProductRepository productRepository) {
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
     }
