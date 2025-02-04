@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ClientRepositoryJPA extends JpaRepository<ClientEntity, Long> {
 
     Optional<ClientEntity> getClientByCpf(String cpf);
+    Optional<ClientEntity> getClientByEmail(String email);
 }

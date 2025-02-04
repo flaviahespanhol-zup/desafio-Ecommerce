@@ -18,10 +18,12 @@ public class ClientRepository {
 
     public ClientDTO registerClient(PostClientDTO newClient)
             throws ClientAlredyExistsException {
-        boolean clientExists = clientRepositoryJPA.getClientByCpf(newClient.cpf()).isPresent();
-        if (clientExists) {
+        boolean cpfExists = clientRepositoryJPA.getClientByCpf(newClient.cpf()).isPresent();
+        boolean emailExists = clientRepositoryJPA.getClientByEmail(newClient.email()).isPresent();
+        if (cpfExists || emailExists) {
             throw new ClientAlredyExistsException();
         }
+
         ClientEntity newClientEntity = newClient.dtoToEntity();
         ClientEntity saveNewClient = clientRepositoryJPA.save(newClientEntity);
         return ClientDTO.entityToDTO(saveNewClient);
