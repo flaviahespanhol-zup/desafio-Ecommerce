@@ -2,7 +2,7 @@ package desafio.ecommerce.repositories;
 
 import desafio.ecommerce.dtos.ClientDTO;
 import desafio.ecommerce.dtos.PostClientDTO;
-import desafio.ecommerce.exceptions.ClientAlredyExistsException;
+import desafio.ecommerce.exceptions.ClientAlreadyExistsException;
 import desafio.ecommerce.exceptions.ClientNotFoundException;
 import desafio.ecommerce.models.ClientEntity;
 import jakarta.validation.Valid;
@@ -18,11 +18,11 @@ public class ClientRepository {
     }
 
     public ClientDTO registerClient(PostClientDTO newClient)
-            throws ClientAlredyExistsException {
+            throws ClientAlreadyExistsException {
         boolean cpfExists = clientRepositoryJPA.getClientByCpf(newClient.cpf()).isPresent();
         boolean emailExists = clientRepositoryJPA.getClientByEmail(newClient.email()).isPresent();
         if (cpfExists || emailExists) {
-            throw new ClientAlredyExistsException();
+            throw new ClientAlreadyExistsException();
         }
 
         ClientEntity newClientEntity = newClient.dtoToEntity();
@@ -44,14 +44,14 @@ public class ClientRepository {
     }
 
     public ClientDTO updateClient(Long id, @Valid PostClientDTO clientUpdated)
-            throws ClientNotFoundException, ClientAlredyExistsException {
+            throws ClientNotFoundException, ClientAlreadyExistsException {
         ClientEntity client = clientRepositoryJPA.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
 
         boolean cpfExists = clientRepositoryJPA.getClientByCpf(clientUpdated.cpf()).isPresent();
         boolean emailExists = clientRepositoryJPA.getClientByEmail(clientUpdated.email()).isPresent();
         if (cpfExists || emailExists) {
-            throw new ClientAlredyExistsException();
+            throw new ClientAlreadyExistsException();
         }
 
         updateClientFields(client, clientUpdated);

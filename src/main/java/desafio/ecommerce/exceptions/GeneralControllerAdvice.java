@@ -51,8 +51,8 @@ public class GeneralControllerAdvice {
                 );
     }
 
-    @ExceptionHandler(ClientAlredyExistsException.class)
-    public ResponseEntity<String> handleClientExists(ClientAlredyExistsException exception) {
+    @ExceptionHandler(ClientAlreadyExistsException.class)
+    public ResponseEntity<String> handleClientExists(ClientAlreadyExistsException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(
